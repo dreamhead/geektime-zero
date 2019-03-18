@@ -1,0 +1,43 @@
+class CoverageExtension {
+    List<String> excludePackages
+    List<String> excludeClasses
+}
+
+project.extensions.create('coverage', CoverageExtension)
+
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = '0.8.3'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/reports/jacoco")
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 1.0
+            }
+        }
+    }
+
+    afterEvaluate {
+        def excludePackagesPattern = coverage.excludePackages.collect { it.replaceAll('\\.', '/') + '/*' }
+        def excludeClassesPattern = coverage.excludeClasses.collect { it.replaceAll('\\.', '/') + '.class' }
+
+        classDirectories.from(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [excludePackagesPattern, excludeClassesPattern].flatten())
+        }))
+    }
+}
+
+jacocoTestCoverageVerification.dependsOn test
+jacocoTestCoverageVerification.shouldRunAfter jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification, jacocoTestReport

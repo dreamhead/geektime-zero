@@ -1,0 +1,25 @@
+plugins {
+    id 'org.springframework.boot' version '2.1.2.RELEASE'
+}
+
+style {
+    excludePackages = [
+    ]
+    excludeClasses = [
+            "Bootstrap"
+    ]
+}
+
+springBoot {
+    mainClassName = 'com.github.dreamhead.zero.bootstrap.Bootstrap'
+}
+
+bootJar {
+    classifier = 'boot'
+
+    // https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes#jersey-classpath-scanning-limitations
+    requiresUnpack '**/jarvis-*.jar'
+
+    excludeDevtools = false
+    launchScript()
+}

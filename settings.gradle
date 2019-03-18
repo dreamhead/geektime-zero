@@ -1,0 +1,4 @@
+rootProject.name = 'geektime-zero'
+
+include 'zero-bootstrap'
+include 'zero-identity'
