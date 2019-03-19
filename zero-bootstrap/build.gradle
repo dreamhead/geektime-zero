@@ -6,7 +6,15 @@ style {
     excludePackages = [
     ]
     excludeClasses = [
-            "Bootstrap"
+            "com.github.dreamhead.zero.bootstrap.Bootstrap"
+    ]
+}
+
+coverage {
+    excludePackages = [
+    ]
+    excludeClasses = [
+            "com.github.dreamhead.zero.bootstrap.Bootstrap"
     ]
 }
 

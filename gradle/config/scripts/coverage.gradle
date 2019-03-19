@@ -1,43 +1,63 @@
 class CoverageExtension {
-    List<String> excludePackages
-    List<String> excludeClasses
+    boolean enabled = true
+    List<String> excludePackages;
+    List<String> excludeClasses;
 }
 
 project.extensions.create('coverage', CoverageExtension)
 
 apply plugin: 'jacoco'
 
-jacoco {
-    toolVersion = '0.8.3'
-}
+jacoco.toolVersion = "0.8.3"
 
-jacocoTestReport {
-    reports {
-        xml.enabled false
-        csv.enabled false
-        html.destination file("${buildDir}/reports/jacoco")
-    }
-}
+task coverageCheck(dependsOn: test) {
+    doLast {
+        if (!coverage.enabled) {
+            return
+        }
 
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                minimum = 1.0
+        if (!file("$buildDir/classes/java/test").exists()) {
+            return
+        }
+
+        ant.taskdef(name: 'jacocoReport',
+                classname: 'org.jacoco.ant.ReportTask',
+                classpath: configurations.jacocoAnt.asPath)
+
+        ant.jacocoReport {
+            executiondata {
+                fileset(dir: "$buildDir/jacoco") {
+                    include name: 'test.exec'
+                }
+            }
+
+            structure(name: project.name) {
+                classfiles {
+                    fileset(dir: "$buildDir/classes/java/main") {
+                        coverage.excludePackages.each() {
+                            exclude name: "${it.replaceAll('\\.', '/') + '/*'}"
+                        }
+                        coverage.excludeClasses.each() {
+                            exclude name: "${it.replaceAll('\\.', '/') + '.class'}"
+                        }
+                    }
+                }
+                sourcefiles {
+                    fileset dir: "src/main/java"
+                }
+            }
+
+            html(destdir: "$buildDir/reports/jacoco")
+
+            check(failOnViolation: true) {
+                rule(element: 'PACKAGE') {
+                    limit(counter: "LINE", value: "COVEREDRATIO", minimum: "1.0")
+                    limit(counter: "CLASS", value: "COVEREDRATIO", minimum: "1.0")
+
+                }
             }
         }
     }
-
-    afterEvaluate {
-        def excludePackagesPattern = coverage.excludePackages.collect { it.replaceAll('\\.', '/') + '/*' }
-        def excludeClassesPattern = coverage.excludeClasses.collect { it.replaceAll('\\.', '/') + '.class' }
-
-        classDirectories.from(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [excludePackagesPattern, excludeClassesPattern].flatten())
-        }))
-    }
 }
 
-jacocoTestCoverageVerification.dependsOn test
-jacocoTestCoverageVerification.shouldRunAfter jacocoTestReport
-check.dependsOn jacocoTestCoverageVerification, jacocoTestReport
+check.dependsOn "coverageCheck"
