@@ -26,7 +26,7 @@ bootJar {
     classifier = 'boot'
 
     // https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-1.4-Release-Notes#jersey-classpath-scanning-limitations
-    requiresUnpack '**/jarvis-*.jar'
+    requiresUnpack '**/zero-*.jar'
 
     excludeDevtools = false
     launchScript()
