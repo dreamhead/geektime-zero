@@ -93,7 +93,7 @@ allprojects {
 apply from: "$rootDir/gradle/config/scripts/idea.gradle"
 
 flyway {
-    url = 'jdbc:mysql://localhost:3306/zero_test?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true'
+    url = 'jdbc:mysql://localhost:3306/zero_test?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT'
     user = 'zero'
     password = 'geektime'
     locations = ["filesystem:$rootDir/gradle/config/migration"]
