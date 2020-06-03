@@ -1,6 +1,6 @@
 package com.github.dreamhead.zero.identity.resource;
 
-public class UserInfo {
+public final class UserInfo {
     private final String username;
     private final String password;
 

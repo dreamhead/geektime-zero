@@ -3,7 +3,7 @@ package com.github.dreamhead.zero.identity.resource;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UserRegistration {
+public final class UserRegistration {
     private final String username;
     private final String password;
 

@@ -9,7 +9,7 @@ apply plugin: 'checkstyle'
 
 checkstyle {
     configFile = file("$rootDir/gradle/config/checkstyle/sun_checks.xml")
-    toolVersion = '8.17'
+    toolVersion = checkstyleVersion
 }
 
 checkstyleTest.enabled = false

@@ -16,7 +16,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RestController
-public class UserResource {
+public final class UserResource {
     private UserService service;
 
     @Autowired
