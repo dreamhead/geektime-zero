@@ -19,7 +19,7 @@ coverage {
 }
 
 springBoot {
-    mainClassName = 'com.github.dreamhead.zero.bootstrap.Bootstrap'
+    mainClass = 'com.github.dreamhead.zero.bootstrap.Bootstrap'
 }
 
 bootJar {
